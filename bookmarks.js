@@ -1,7 +1,7 @@
 const bookmarks = (function () {
 
     const addBookmark = function(item) {
-        this.bookmarkItems.push(item);
+        this.bookmarkItems.unshift(item);
     };
 
     return {

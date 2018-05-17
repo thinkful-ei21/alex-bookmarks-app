@@ -5,8 +5,8 @@ const api = (function () {
         $.getJSON(BASE_URL,callback);
     }
 
-    const createBookmark = function (title, url, description, rating, callback){
-        const newItem = JSON.stringify({title,url,description,rating, expanded: false});
+    const createBookmark = function (title, url, desc, rating, callback){
+        const newItem = JSON.stringify({title,url,desc,rating, expanded: false});
         $.ajax({
           url: BASE_URL,
           method: 'POST',
@@ -19,14 +19,26 @@ const api = (function () {
     const updateBookmark = function(id, updateData, callback){
         const newData = JSON.stringify(updateData);
         $.ajax({
-          url: BASE_URL + id,
+          url: BASE_URL + '/' + id,
           method: 'PATCH',
           contentType: 'application/json',
           data: newData,
           success:callback,
     
         })
-      };
+    };
+
+    const deleteBookmark = function(id, callback){
+        const newData = JSON.stringify(updateData);
+        $.ajax({
+          url: BASE_URL + '/' + id,
+          method: 'DELETE',
+          contentType: 'application/json',
+          data: newData,
+          success:callback,
+    
+        })
+    };
 
     return {
         getBookmarks,
