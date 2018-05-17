@@ -24,13 +24,17 @@ const bookmarkslist = (function () {
                 return `
                 <li class="js-bookmark-element" data-bookmark-id="${bookmark.id}">
                 <div>
-                    <span class="js-bookmark-title-span">${bookmark.title}</span>
+                    <span class="js-bookmark-title-span">
+                    ${bookmark.title}
+                    <input type="button" class="bookmark-expand js-bookmark-expand" value="&lsaquo;">
+                    </span>
+
                 </div>
                 <div>
                     <label>URL</label>
                     <span class="js-bookmark-url-span">${bookmark.url}</span>
                     <button type="submit" class="js-bookmark-edit">Edit</button>
-                    <button type="submit" class="js-bookmark-delete">Delete/button>
+                    <button type="submit" class="js-bookmark-delete">Delete</button>
                 </div>
                 <div>
                     <label for="">Description</label>
@@ -47,7 +51,7 @@ const bookmarkslist = (function () {
             <div>
                 <span class="js-bookmark-title-span">
                 <a class="title-link" href="${bookmark.url}">${bookmark.title}</a>
-                <a class="bookmark-expand js-bookmark-expand" href="">&lsaquo;</a>
+                <input type="button" class="bookmark-expand js-bookmark-expand" value="&lsaquo;">
                 </span>
             </div>
         </li>
@@ -80,14 +84,25 @@ const bookmarkslist = (function () {
         });
     }
 
+    function getItemIdFromElement(item) {
+        return $(item)
+          .closest('.js-bookmark-element')
+          .data('bookmark-id');
+    }
+
     function handleBookmarkExpand() {
-        $('.js-bookmark-element').on('click', '.js-bookmark.expand', function() {
-            console.log('expand clicked')
+        $('#js-bookmark-list').on('click', 'input', function(event) {
+            console.log($(event.currentTarget).val());
+            const id = getItemIdFromElement(event.currentTarget);
+            const bookmark = bookmarks.bookmarkItems.find(item => item.id === id);
+            bookmark.expanded = !bookmark.expanded;
+            render();
         })
     }
 
     function bindEventListeners() {
         handleAddBookmarkButton();
+        handleBookmarkExpand();
     }
 
     return {
