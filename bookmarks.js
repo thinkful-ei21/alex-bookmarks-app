@@ -4,10 +4,15 @@ const bookmarks = (function () {
         this.bookmarkItems.unshift(item);
     };
 
+    const deleteBookmark = function(id){
+        this.bookmarkItems = this.bookmarkItems.filter(item => item.id !== id);
+    }
+
     return {
         bookmarkItems: [],
         editBookmarkId: "",
         minRating: 1, 
         addBookmark,
+        deleteBookmark,
     }
 }()); 

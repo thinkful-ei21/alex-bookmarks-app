@@ -7,6 +7,7 @@ const api = (function () {
 
     const createBookmark = function (title, url, desc, rating, callback){
         const newItem = JSON.stringify({title,url,desc,rating, expanded: false});
+        console.log(newItem);
         $.ajax({
           url: BASE_URL,
           method: 'POST',
@@ -29,14 +30,11 @@ const api = (function () {
     };
 
     const deleteBookmark = function(id, callback){
-        const newData = JSON.stringify(updateData);
         $.ajax({
           url: BASE_URL + '/' + id,
           method: 'DELETE',
           contentType: 'application/json',
-          data: newData,
           success:callback,
-    
         })
     };
 
@@ -44,5 +42,6 @@ const api = (function () {
         getBookmarks,
         createBookmark,
         updateBookmark,
+        deleteBookmark,
     };
 }());
