@@ -7,6 +7,11 @@
     text-align: center;
     position: relative;
     font-family: 'Roboto Mono', monospace;
+    background-color: beige;
+}
+
+body {
+    background-color: lightslategrey;
 }
 
 ul {
@@ -70,4 +75,16 @@ li {
     margin-right: 5px;
     margin-bottom: 16px;
     height: 66px;
+}
+
+@media screen and (max-width: 400px){
+    h1 {
+        font-size: 20px;
+    }
+
+    #js-add-button {
+        font-size: 20px;
+        width: 30px;
+        height: 30px;
+    }
 }

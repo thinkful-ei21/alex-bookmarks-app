@@ -11,7 +11,7 @@
 <body>
     <div class = 'container'>
         <h1>My Bookmarks</h1>
-        <button id='js-add-button'>+</button>
+        <button id='js-add-button' title="Add a new bookmark.">+</button>
         <div class ='min-rating-box'>
             <label>Minimum Rating</label>
             <select id="js-min-rating-select">
@@ -25,6 +25,7 @@
         <ul id="js-bookmark-list">
         </ul>
     </div>
+    <script src="https://unpkg.com/tippy.js@2.5.2/dist/tippy.all.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/cuid/1.3.8/browser-cuid.min.js"></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="api.js"></script>

@@ -4,6 +4,7 @@ const bookmarkslist = (function () {
         if (bookmark.expanded){
             if (bookmarks.editBookmarkId === bookmark.id) {
                 $("#js-add-button").attr("disabled", true);
+                $("#js-min-rating-select").attr("disabled", true);
                 return `
                 <li class="js-bookmark-element" data-bookmark-id="${bookmark.id}">
                 <form class="edit-form">
@@ -31,7 +32,7 @@ const bookmarkslist = (function () {
                 <div>
                     <span class="js-bookmark-title-span">
                     ${bookmark.title}
-                    <input type="button" class="bookmark-expand js-bookmark-expand" value="&#x25BC;">
+                    <input type="button" class="bookmark-expand js-bookmark-expand" value="&#x25BC;" title="Collapse bookmark">
                     <label class="rating-stars">${generateRatingStars(bookmark.rating)}</label>
                     </span>
 
@@ -57,7 +58,7 @@ const bookmarkslist = (function () {
             <div>
                 <span class="js-bookmark-title-span">
                 <a class="title-link" href="${bookmark.url}">${bookmark.title}</a>
-                <input type="button" class="bookmark-expand js-bookmark-expand" value="&#x25C4;">
+                <input type="button" class="bookmark-expand js-bookmark-expand" value="&#x25C4;" title="Expand bookmark.">
                 <label class="rating-stars">${generateRatingStars(bookmark.rating)}</label>
                 </span>
             </div>
@@ -71,7 +72,14 @@ const bookmarkslist = (function () {
         let items = bookmarks.bookmarkItems;
         //filter bookmark list if min rating above 1
         if (bookmarks.minRating > 1) {
-            items = items.filter(item => item.rating >= bookmarks.minRating);
+            items = items.filter(item => {
+                if(item.rating >= bookmarks.minRating) { 
+                    return item;
+                }
+                else {
+                    item.expanded = false;
+                }
+            });
         }
         
         const bookmarkItemsString = items.map(item => generateBookmarkElement(item)).join('');
@@ -79,7 +87,7 @@ const bookmarkslist = (function () {
         // insert that HTML into the DOM
         $('#js-bookmark-list').html(bookmarkItemsString);
     }
-
+    //generates the correct starting option for particular bookmark in the select element
     function generateSelectElement(rating){
         let selectElementString = '';
         selectElementString += `<select class="js-bookmark-rating-select">`;
@@ -95,6 +103,7 @@ const bookmarkslist = (function () {
         return selectElementString;
     }
 
+    //generates star graphic to correspond with bookmark rating
     function generateRatingStars (rating) {
         let starRatingString = '';
         for (let x = 1; x <= 5; x++) {
@@ -151,18 +160,21 @@ const bookmarkslist = (function () {
                     bookmarks.editNewBookmark = false;
                     render();
                     $("#js-add-button").removeAttr("disabled");
+                    $("#js-min-rating-select").removeAttr("disabled");
                 })
             }
             else {
                 bookmarks.editBookmarkId = '';
                 render();
                 $("#js-add-button").removeAttr("disabled");
+                $("#js-min-rating-select").removeAttr("disabled");
             }
         })
     }
     //handles click event from edit button in expanded bookmark item
     function handleBookmarkEdit() {
         $('#js-bookmark-list').on('click', '.js-bookmark-edit', function(event) {
+            if (bookmarks.editNewBookmark){bookmarks.editNewBookmark = false}
             const id = getItemIdFromElement(event.currentTarget);
             bookmarks.editBookmarkId = id;
             render();
@@ -174,6 +186,10 @@ const bookmarkslist = (function () {
             event.preventDefault();
             const id = getItemIdFromElement(event.currentTarget);
             const item = $(event.currentTarget).closest('form');
+            if ($(item).find('.js-bookmark-title-entry').val() === '' || $(item).find('.js-bookmark-url-entry').val()===''){
+                alert("Title and Url fields cannot be left empty");
+                return;
+            }
             const updatedBookmark = {
                 title: $(item).find('.js-bookmark-title-entry').val(),
                 url: $(item).find('.js-bookmark-url-entry').val(),
@@ -189,7 +205,9 @@ const bookmarkslist = (function () {
             });
 
             bookmarks.editBookmarkId = '';
+            bookmarks.editNewBookmark = false;
             $("#js-add-button").removeAttr("disabled");
+            $("#js-min-rating-select").removeAttr("disabled");
         })
     }
     //handle click event on delete button in expanded bookmark
