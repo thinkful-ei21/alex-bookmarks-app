@@ -6,16 +6,10 @@ const bookmarkslist = (function () {
                 $("#js-add-button").attr("disabled", true);
                 return `
                 <li class="js-bookmark-element" data-bookmark-id="${bookmark.id}">
-                <form>
+                <form class="edit-form">
                 <div>
                     <input type="text" class="js-bookmark-title-entry" value="${bookmark.title}">
-                    <select class="js-bookmark-rating-select">
-                        <option value="1">1 Star</option>
-                        <option value="2">2 Stars</option>
-                        <option value="3">3 Stars</option>
-                        <option value="4">4 Stars</option>
-                        <option value="5">5 Stars</option>
-                    </select>
+                    ${generateSelectElement(bookmark.rating)}
                 </div>
                 <div>
                     <label>URL: </label>
@@ -23,9 +17,9 @@ const bookmarkslist = (function () {
                     <button type="submit" class="js-bookmark-done">Done</button>
                     <button type="submit" class="js-bookmark-discard">Discard</button>
                 </div>
-                <div>
-                    <label for="">Description</label>
-                    <input type="text" class="js-bookmark-desc-entry" value="${bookmark.desc}">
+                <div class="desc-div">
+                    <label for="" class="desc-label">Description:</label>
+                    <textarea class="js-bookmark-desc-entry bookmark-desc-box desc-input">${bookmark.desc}</textarea>
                 </div>
                 </form>
                 </li>
@@ -38,7 +32,7 @@ const bookmarkslist = (function () {
                     <span class="js-bookmark-title-span">
                     ${bookmark.title}
                     <input type="button" class="bookmark-expand js-bookmark-expand" value="&#x25BC;">
-                    <label>${bookmark.rating} star</label>
+                    <label class="rating-stars">${generateRatingStars(bookmark.rating)}</label>
                     </span>
 
                 </div>
@@ -49,8 +43,8 @@ const bookmarkslist = (function () {
                     <button type="submit" class="js-bookmark-delete">Delete</button>
                 </div>
                 <div>
-                    <label for="">Description</label>
-                    <p class="js-bookmark-desc-entry">${bookmark.desc}</p>
+                    <label for="" class="desc-label">Description:</label>
+                    <p class="js-bookmark-desc-entry bookmark-desc-box">${bookmark.desc}</p>
                 </div>
                 </li>
                 `
@@ -64,7 +58,7 @@ const bookmarkslist = (function () {
                 <span class="js-bookmark-title-span">
                 <a class="title-link" href="${bookmark.url}">${bookmark.title}</a>
                 <input type="button" class="bookmark-expand js-bookmark-expand" value="&#x25C4;">
-                <label>${bookmark.rating} star</label>
+                <label class="rating-stars">${generateRatingStars(bookmark.rating)}</label>
                 </span>
             </div>
         </li>
@@ -84,6 +78,34 @@ const bookmarkslist = (function () {
         
         // insert that HTML into the DOM
         $('#js-bookmark-list').html(bookmarkItemsString);
+    }
+
+    function generateSelectElement(rating){
+        let selectElementString = '';
+        selectElementString += `<select class="js-bookmark-rating-select">`;
+        for (let x = 1; x <= 5; x++) {
+            if (rating == x) {
+                selectElementString += `<option value="${x}" selected="selected">${x} Star</option>`;
+            }
+            else {
+                selectElementString += `<option value="${x}">${x} Star</option>`;
+            }
+        }
+        selectElementString += `</select>`;
+        return selectElementString;
+    }
+
+    function generateRatingStars (rating) {
+        let starRatingString = '';
+        for (let x = 1; x <= 5; x++) {
+            if (x <= rating) {
+                starRatingString += '&#x2605;'
+            }
+            else {
+                starRatingString += '&#x2606;'
+            }
+        }
+        return starRatingString;
     }
 
     //handles add bookmark button events

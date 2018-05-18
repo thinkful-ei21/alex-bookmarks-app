@@ -6,6 +6,7 @@
     align-content: center;
     text-align: center;
     position: relative;
+    font-family: 'Roboto Mono', monospace;
 }
 
 ul {
@@ -23,14 +24,50 @@ ul {
 li {
     padding-bottom: 10px;
     padding-left: 10px;
+    padding-right: 10px;
     padding-top: 10px;
     list-style-type: none;
     border-bottom: solid black;
+    position: relative;
 }
 
 #js-add-button {
     font-size: 30pt;
     position: absolute;
-    right: 0;
-    top: 0;
+    right: 10px;
+    top: 10px;
+    height: 50px;
+    width: 50px;
+    align-items: center;
+    padding-top: 5px;
+    text-align: center;
+}
+
+.rating-stars {
+    font-size: 20pt;
+    position: absolute;
+    right: 10px;
+    top: 0px;
+}
+
+.bookmark-desc-box {
+    width: auto;
+    height: 70px;
+    background-color: lightgray;
+    border: solid 1px gray;
+    margin-top: 0;
+    padding-left: 2px;
+}
+
+.desc-label {
+    margin-bottom: 0;
+}
+
+.desc-input {
+    display: block;
+    font-size: 16px;
+    width: 100%;
+    margin-right: 5px;
+    margin-bottom: 16px;
+    height: 66px;
 }
