@@ -11,6 +11,7 @@ const bookmarks = (function () {
     return {
         bookmarkItems: [],
         editBookmarkId: "",
+        editNewBookmark: false,
         minRating: 1, 
         addBookmark,
         deleteBookmark,

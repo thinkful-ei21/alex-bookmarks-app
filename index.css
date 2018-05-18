@@ -10,6 +10,22 @@
 
 ul {
     list-style-type: none;
+    text-align: left;
+    border-top: solid black;
+    border-left: solid black;
+    border-right: solid black;
+    margin-left: 10px;
+    margin-right: 10px;
+    padding-top: 0px;
+    padding-left: 0;
+}
+
+li {
+    padding-bottom: 10px;
+    padding-left: 10px;
+    padding-top: 10px;
+    list-style-type: none;
+    border-bottom: solid black;
 }
 
 #js-add-button {

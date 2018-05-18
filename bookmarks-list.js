@@ -18,7 +18,7 @@ const bookmarkslist = (function () {
                     </select>
                 </div>
                 <div>
-                    <label>URL</label>
+                    <label>URL: </label>
                     <input type="text" class="js-bookmark-url-entry" value="${bookmark.url}">
                     <button type="submit" class="js-bookmark-done">Done</button>
                     <button type="submit" class="js-bookmark-discard">Discard</button>
@@ -37,14 +37,14 @@ const bookmarkslist = (function () {
                 <div>
                     <span class="js-bookmark-title-span">
                     ${bookmark.title}
-                    <input type="button" class="bookmark-expand js-bookmark-expand" value="&lsaquo;">
+                    <input type="button" class="bookmark-expand js-bookmark-expand" value="&#x25BC;">
                     <label>${bookmark.rating} star</label>
                     </span>
 
                 </div>
                 <div>
-                    <label>URL</label>
-                    <span class="js-bookmark-url-span">${bookmark.url}</span>
+                    <label>URL: </label>
+                    <span class="js-bookmark-url-span"><a class="url-link" href="${bookmark.url}">${bookmark.url}</a></span>
                     <button type="submit" class="js-bookmark-edit">Edit</button>
                     <button type="submit" class="js-bookmark-delete">Delete</button>
                 </div>
@@ -63,7 +63,7 @@ const bookmarkslist = (function () {
             <div>
                 <span class="js-bookmark-title-span">
                 <a class="title-link" href="${bookmark.url}">${bookmark.title}</a>
-                <input type="button" class="bookmark-expand js-bookmark-expand" value="&lsaquo;">
+                <input type="button" class="bookmark-expand js-bookmark-expand" value="&#x25C4;">
                 <label>${bookmark.rating} star</label>
                 </span>
             </div>
@@ -93,6 +93,7 @@ const bookmarkslist = (function () {
                 newBookmark.expanded = true;
                 bookmarks.addBookmark(newBookmark);
                 bookmarks.editBookmarkId = newBookmark.id;
+                bookmarks.editNewBookmark = true;
                 render();
             });
         });
@@ -117,15 +118,29 @@ const bookmarkslist = (function () {
     //handles click event from discard button in expanded bookmark item
     function handleBookmarkDiscard() {
         $('#js-bookmark-list').on('click', '.js-bookmark-discard', function(event) {
-            bookmarks.editBookmarkId = '';
-            render();
-            $("#js-add-button").removeAttr("disabled");
+            event.preventDefault();
+            //if bookmark is new discard deletes bookmark
+            if (bookmarks.editNewBookmark){
+                const id = getItemIdFromElement(event.currentTarget);
+                console.log(id);
+                api.deleteBookmark(id, callback => {
+                    bookmarks.deleteBookmark(id);
+                    bookmarks.editBookmarkId = '';
+                    bookmarks.editNewBookmark = false;
+                    render();
+                    $("#js-add-button").removeAttr("disabled");
+                })
+            }
+            else {
+                bookmarks.editBookmarkId = '';
+                render();
+                $("#js-add-button").removeAttr("disabled");
+            }
         })
     }
     //handles click event from edit button in expanded bookmark item
     function handleBookmarkEdit() {
         $('#js-bookmark-list').on('click', '.js-bookmark-edit', function(event) {
-            //console.log($(event.currentTarget).val());
             const id = getItemIdFromElement(event.currentTarget);
             bookmarks.editBookmarkId = id;
             render();
@@ -143,13 +158,14 @@ const bookmarkslist = (function () {
                 desc: $(item).find('.js-bookmark-desc-entry').val(),
                 rating: $(item).find('.js-bookmark-rating-select').val(),
             }
+
             if (updatedBookmark.desc === ''){updatedBookmark.desc = 'empty'}
             
             api.updateBookmark(id, updatedBookmark, updateBookmarkItem => {
                 Object.assign(bookmarks.bookmarkItems.find(item => item.id === id), updatedBookmark);
-                console.log(bookmarks.bookmarkItems.find(item => item.id === id));
                 render();
             });
+
             bookmarks.editBookmarkId = '';
             $("#js-add-button").removeAttr("disabled");
         })
