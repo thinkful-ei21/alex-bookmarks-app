@@ -1,3 +1,9 @@
+//this iefy function acts as the 'store' object
+//
+//
+//
+//
+//
 const bookmarks = (function () {
 
     const addBookmark = function(item) {
@@ -15,5 +21,6 @@ const bookmarks = (function () {
         minRating: 1, 
         addBookmark,
         deleteBookmark,
+        inputError: false,
     }
 }()); 

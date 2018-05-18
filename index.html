@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,7 +10,7 @@
 </head>
 <body>
     <div class = 'container'>
-        <h1>My Bookmarks</h1>
+        <h1 role="banner">My Bookmarks</h1>
         <button id='js-add-button' title="Add a new bookmark.">+</button>
         <div class ='min-rating-box'>
             <label>Minimum Rating</label>
@@ -22,7 +22,7 @@
                 <option value="5">5 Stars</option>
             </select>
         </div>
-        <ul id="js-bookmark-list">
+        <ul id="js-bookmark-list" role="main">
         </ul>
     </div>
     <script src="https://unpkg.com/tippy.js@2.5.2/dist/tippy.all.min.js"></script>

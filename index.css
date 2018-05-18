@@ -77,6 +77,10 @@ li {
     height: 66px;
 }
 
+.error-box {
+    background-color: red;
+}
+
 @media screen and (max-width: 400px){
     h1 {
         font-size: 20px;

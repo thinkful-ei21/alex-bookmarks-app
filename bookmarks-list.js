@@ -8,6 +8,7 @@ const bookmarkslist = (function () {
                 return `
                 <li class="js-bookmark-element" data-bookmark-id="${bookmark.id}">
                 <form class="edit-form">
+                ${generateErrorMessage()}
                 <div>
                     <input type="text" class="js-bookmark-title-entry" value="${bookmark.title}">
                     ${generateSelectElement(bookmark.rating)}
@@ -117,6 +118,13 @@ const bookmarkslist = (function () {
         return starRatingString;
     }
 
+    function generateErrorMessage () {
+        if (bookmarks.inputError) {
+            return `<label class="error-box">Title and URL fields cannot be left empty</label>`;
+        }
+        return '';
+    }
+
     //handles add bookmark button events
     function handleAddBookmarkButton() {
         $('#js-add-button').click(function(){
@@ -150,6 +158,7 @@ const bookmarkslist = (function () {
     function handleBookmarkDiscard() {
         $('#js-bookmark-list').on('click', '.js-bookmark-discard', function(event) {
             event.preventDefault();
+            bookmarks.inputError = false;
             //if bookmark is new discard deletes bookmark
             if (bookmarks.editNewBookmark){
                 const id = getItemIdFromElement(event.currentTarget);
@@ -177,6 +186,7 @@ const bookmarkslist = (function () {
             if (bookmarks.editNewBookmark){bookmarks.editNewBookmark = false}
             const id = getItemIdFromElement(event.currentTarget);
             bookmarks.editBookmarkId = id;
+            bookmarks.inputError = false;
             render();
         })
     }
@@ -187,7 +197,8 @@ const bookmarkslist = (function () {
             const id = getItemIdFromElement(event.currentTarget);
             const item = $(event.currentTarget).closest('form');
             if ($(item).find('.js-bookmark-title-entry').val() === '' || $(item).find('.js-bookmark-url-entry').val()===''){
-                alert("Title and Url fields cannot be left empty");
+                bookmarks.inputError = true;
+                render();
                 return;
             }
             const updatedBookmark = {
@@ -201,6 +212,7 @@ const bookmarkslist = (function () {
             
             api.updateBookmark(id, updatedBookmark, updateBookmarkItem => {
                 Object.assign(bookmarks.bookmarkItems.find(item => item.id === id), updatedBookmark);
+                bookmarks.inputError = false;
                 render();
             });
 
