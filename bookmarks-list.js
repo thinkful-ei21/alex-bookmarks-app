@@ -1,7 +1,10 @@
 const bookmarkslist = (function () {
+    //generates html for state of each bookmark
     function generateBookmarkElement(bookmark){
         if (bookmark.desc === 'empty'){bookmark.desc = ''}
+        //expanded bookmark
         if (bookmark.expanded){
+            //expanded and being edited
             if (bookmarks.editBookmarkId === bookmark.id) {
                 $("#js-add-button").attr("disabled", true);
                 $("#js-min-rating-select").attr("disabled", true);
@@ -53,6 +56,7 @@ const bookmarkslist = (function () {
             }
         
         }
+        //collapsed bookmark
         else {
         return `
         <li class="js-bookmark-element" data-bookmark-id="${bookmark.id}">
@@ -68,7 +72,8 @@ const bookmarkslist = (function () {
         }
         
     }
-
+    //function that renders all dynamic content
+    //is called after almost every app action
     function render() {
         let items = bookmarks.bookmarkItems;
         //filter bookmark list if min rating above 1
@@ -82,7 +87,7 @@ const bookmarkslist = (function () {
                 }
             });
         }
-        
+        //generate long single html string
         const bookmarkItemsString = items.map(item => generateBookmarkElement(item)).join('');
         
         // insert that HTML into the DOM
@@ -117,7 +122,7 @@ const bookmarkslist = (function () {
         }
         return starRatingString;
     }
-
+    //generates error message is title or url fields left empty
     function generateErrorMessage () {
         if (bookmarks.inputError) {
             return `<label class="error-box">Title and URL fields cannot be left empty</label>`;
@@ -196,6 +201,7 @@ const bookmarkslist = (function () {
             event.preventDefault();
             const id = getItemIdFromElement(event.currentTarget);
             const item = $(event.currentTarget).closest('form');
+            //displays error message if title or url fields empty
             if ($(item).find('.js-bookmark-title-entry').val() === '' || $(item).find('.js-bookmark-url-entry').val()===''){
                 bookmarks.inputError = true;
                 render();
@@ -209,7 +215,7 @@ const bookmarkslist = (function () {
             }
 
             if (updatedBookmark.desc === ''){updatedBookmark.desc = 'empty'}
-            
+            //updates api data and local bookmarks array with updated bookmark
             api.updateBookmark(id, updatedBookmark, updateBookmarkItem => {
                 Object.assign(bookmarks.bookmarkItems.find(item => item.id === id), updatedBookmark);
                 bookmarks.inputError = false;
@@ -241,7 +247,7 @@ const bookmarkslist = (function () {
             render();
         })
     }
-
+    //binds all event listeners
     function bindEventListeners() {
         handleAddBookmarkButton();
         handleBookmarkExpand();
